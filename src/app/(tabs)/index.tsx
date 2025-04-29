@@ -6,6 +6,8 @@ import { BeachTennisIcon } from '../../components/icons/BeachTennisIcon';
 import { FootvolleyIcon } from '../../components/icons/FootvolleyIcon';
 import { VolleyballIcon } from '../../components/icons/VolleyballIcon';
 
+import { Header } from '@/components';
+
 const sports = [
   {
     id: 1,
@@ -70,15 +72,7 @@ export default function Home() {
     <SafeAreaView className="flex-1 bg-white">
       <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
         <View className="px-4 pb-20">
-          {/* Header */}
-          <View className="flex-row items-center justify-between py-4">
-            <View className="h-8 w-8 items-center justify-center rounded-lg bg-orange-500">
-              <Ionicons name="tennisball-outline" size={24} color="white" />
-            </View>
-            <TouchableOpacity>
-              <View className="h-8 w-8 rounded-full bg-gray-200" />
-            </TouchableOpacity>
-          </View>
+          <Header />
 
           {/* Sports Selection */}
           <View className="flex-row space-x-4 py-4">

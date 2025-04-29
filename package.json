@@ -9,13 +9,15 @@
     "prebuild": "expo prebuild",
     "lint": "eslint \"**/*.{js,jsx,ts,tsx}\" && prettier -c \"**/*.{js,jsx,ts,tsx,json}\"",
     "format": "eslint \"**/*.{js,jsx,ts,tsx}\" --fix && prettier \"**/*.{js,jsx,ts,tsx,json}\" --write",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "generate-exports": "node generate-exports.js"
   },
   "dependencies": {
     "@expo/vector-icons": "^14.0.0",
     "@react-navigation/native": "^7.0.3",
     "expo": "^52.0.46",
     "expo-constants": "~17.0.8",
+    "expo-image": "~2.0.7",
     "expo-linking": "~7.0.5",
     "expo-router": "~4.0.6",
     "expo-status-bar": "~2.0.1",
