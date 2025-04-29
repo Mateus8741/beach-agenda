@@ -4,8 +4,8 @@ export * from './Container';
 export * from './CourtBooking';
 export * from './EditScreenInfo';
 export * from './Header';
+export * from './icons/Icons';
 export * from './ScreenContent';
+export * from './SportSelect';
 export * from './TabBarIcon';
-export * from './icons/BeachTennisIcon';
-export * from './icons/FootvolleyIcon';
-export * from './icons/VolleyballIcon';
+

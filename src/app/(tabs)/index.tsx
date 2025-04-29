@@ -2,29 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { BeachTennisIcon } from '../../components/icons/BeachTennisIcon';
-import { FootvolleyIcon } from '../../components/icons/FootvolleyIcon';
-import { VolleyballIcon } from '../../components/icons/VolleyballIcon';
-
-import { Header } from '@/components';
-
-const sports = [
-  {
-    id: 1,
-    name: 'Beach Tennis',
-    Icon: BeachTennisIcon,
-  },
-  {
-    id: 2,
-    name: 'Volleyball',
-    Icon: VolleyballIcon,
-  },
-  {
-    id: 3,
-    name: 'Footvolley',
-    Icon: FootvolleyIcon,
-  },
-];
+import { Header, SportSelect } from '@/components';
 
 const days = [
   { id: 1, day: 'MON', date: '28', selected: true },
@@ -74,17 +52,7 @@ export default function Home() {
         <View className="px-4 pb-20">
           <Header />
 
-          {/* Sports Selection */}
-          <View className="flex-row space-x-4 py-4">
-            {sports.map((sport) => (
-              <TouchableOpacity key={sport.id} className="items-center">
-                <View className="mb-1 h-16 w-16 items-center justify-center rounded-lg bg-orange-500">
-                  <sport.Icon />
-                </View>
-                <Text className="text-center text-xs">{sport.name}</Text>
-              </TouchableOpacity>
-            ))}
-          </View>
+          <SportSelect selectedSport="1" onSelectSport={() => {}} />
 
           {/* Calendar */}
           <View className="flex-row items-center justify-between py-4">
