@@ -28,7 +28,7 @@ interface SportSelectProps {
 
 export function SportSelect({ selectedSport = '1', onSelectSport }: Readonly<SportSelectProps>) {
   return (
-    <View className="flex-row gap-3 px-4">
+    <View className="flex-row gap-3 py-4">
       {sports.map((sport) => {
         const isSelected = sport.id.toString() === selectedSport;
 
