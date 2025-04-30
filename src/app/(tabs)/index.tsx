@@ -45,13 +45,7 @@ export default function Home() {
 
           <SportSelect selectedSport="1" onSelectSport={() => {}} />
 
-          <Calendar
-            month="April"
-            year="2025"
-            onPreviousMonth={() => {}}
-            onNextMonth={() => {}}
-            onSelectDay={() => {}}
-          />
+          <Calendar onSelectDay={(day) => console.log('selected day', day)} />
 
           {/* Available Courts */}
           <View className="py-4">
