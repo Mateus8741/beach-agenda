@@ -2,16 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { Header, SportSelect } from '@/components';
-
-const days = [
-  { id: 1, day: 'MON', date: '28', selected: true },
-  { id: 2, day: 'TUE', date: '29' },
-  { id: 3, day: 'WED', date: '30' },
-  { id: 4, day: 'THU', date: '1' },
-  { id: 5, day: 'FRI', date: '2' },
-  { id: 6, day: 'SAT', date: '3' },
-];
+import { Calendar, Header, SportSelect } from '@/components';
 
 const courts = [
   {
@@ -54,39 +45,13 @@ export default function Home() {
 
           <SportSelect selectedSport="1" onSelectSport={() => {}} />
 
-          {/* Calendar */}
-          <View className="flex-row items-center justify-between py-4">
-            <Text className="text-lg font-semibold">April 2025</Text>
-            <View className="flex-row space-x-2">
-              <TouchableOpacity>
-                <Ionicons name="chevron-back-outline" size={24} />
-              </TouchableOpacity>
-              <TouchableOpacity>
-                <Ionicons name="chevron-forward-outline" size={24} />
-              </TouchableOpacity>
-            </View>
-          </View>
-
-          {/* Days */}
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} className="space-x-2">
-            {days.map((item) => (
-              <TouchableOpacity
-                key={item.id}
-                className={`h-16 w-12 items-center justify-center rounded-lg ${
-                  item.selected ? 'bg-orange-500' : 'bg-gray-100'
-                }`}>
-                <Text className={`text-xs ${item.selected ? 'text-white' : 'text-gray-600'}`}>
-                  {item.day}
-                </Text>
-                <Text
-                  className={`text-lg font-semibold ${
-                    item.selected ? 'text-white' : 'text-gray-900'
-                  }`}>
-                  {item.date}
-                </Text>
-              </TouchableOpacity>
-            ))}
-          </ScrollView>
+          <Calendar
+            month="April"
+            year="2025"
+            onPreviousMonth={() => {}}
+            onNextMonth={() => {}}
+            onSelectDay={() => {}}
+          />
 
           {/* Available Courts */}
           <View className="py-4">
