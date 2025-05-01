@@ -1,6 +1,8 @@
 import { Ionicons } from '@expo/vector-icons';
 import { Text, TouchableOpacity, View } from 'react-native';
 
+import { BookingButton } from './BookingButton';
+
 import { useTimeSelect } from '@/hooks';
 
 interface Court {
@@ -83,17 +85,10 @@ export function AvailableCourts({
               </View>
 
               {selectedTimes[court.id]?.length > 0 && (
-                <View className="mt-4">
-                  <TouchableOpacity
-                    onPress={() => onConfirmBooking?.(court.id, selectedTimes[court.id])}
-                    className="flex-row items-center justify-center rounded-lg bg-orange-500 px-4 py-3">
-                    <Ionicons name="calendar-outline" size={20} color="white" />
-                    <Text className="ml-2 font-medium text-white">
-                      Reservar {selectedTimes[court.id].length} horário
-                      {selectedTimes[court.id].length > 1 ? 's' : ''}
-                    </Text>
-                  </TouchableOpacity>
-                </View>
+                <BookingButton
+                  selectedTimes={selectedTimes[court.id]}
+                  onConfirm={() => onConfirmBooking?.(court.id, selectedTimes[court.id])}
+                />
               )}
             </View>
           </View>
