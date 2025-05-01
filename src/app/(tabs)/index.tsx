@@ -68,8 +68,8 @@ const bookings = [
 ];
 
 export default function Home() {
-  function handleSelectTime(courtId: number, time: string) {
-    console.log(courtId, time);
+  function handleSelectTime(courtId: number, selectedTimes: string[]) {
+    console.log(courtId, selectedTimes);
   }
 
   return (
@@ -82,7 +82,10 @@ export default function Home() {
 
           <Calendar onSelectDay={() => {}} />
 
-          <AvailableCourts courts={courts} onSelectTime={handleSelectTime} />
+          <AvailableCourts
+            courts={courts}
+            onSelectTime={(courtId, selectedTimes) => handleSelectTime(courtId, selectedTimes)}
+          />
 
           {/* My Bookings */}
           <View className="py-4">
