@@ -13,10 +13,15 @@ interface Court {
 interface AvailableCourtsProps {
   courts: Court[];
   onSelectTime?: (courtId: number, selectedTimes: string[]) => void;
+  onConfirmBooking?: (courtId: number, selectedTimes: string[]) => void;
 }
 
-export function AvailableCourts({ courts, onSelectTime }: Readonly<AvailableCourtsProps>) {
-  const { handleTimeSelect, isTimeSelected } = useTimeSelect({ onSelectTime });
+export function AvailableCourts({
+  courts,
+  onSelectTime,
+  onConfirmBooking,
+}: Readonly<AvailableCourtsProps>) {
+  const { handleTimeSelect, isTimeSelected, selectedTimes } = useTimeSelect({ onSelectTime });
 
   return (
     <View className="py-4">
@@ -76,6 +81,20 @@ export function AvailableCourts({ courts, onSelectTime }: Readonly<AvailableCour
                   })}
                 </View>
               </View>
+
+              {selectedTimes[court.id]?.length > 0 && (
+                <View className="mt-4">
+                  <TouchableOpacity
+                    onPress={() => onConfirmBooking?.(court.id, selectedTimes[court.id])}
+                    className="flex-row items-center justify-center rounded-lg bg-orange-500 px-4 py-3">
+                    <Ionicons name="calendar-outline" size={20} color="white" />
+                    <Text className="ml-2 font-medium text-white">
+                      Reservar {selectedTimes[court.id].length} horário
+                      {selectedTimes[court.id].length > 1 ? 's' : ''}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              )}
             </View>
           </View>
         ))}
