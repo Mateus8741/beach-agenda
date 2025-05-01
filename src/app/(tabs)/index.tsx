@@ -68,7 +68,7 @@ const bookings = [
 ];
 
 export default function Home() {
-  function handleSelectTime(courtId: number, selectedTimes: string[]) {
+  function handleConfirmBooking(courtId: number, selectedTimes: string[]) {
     console.log(courtId, selectedTimes);
   }
 
@@ -84,7 +84,9 @@ export default function Home() {
 
           <AvailableCourts
             courts={courts}
-            onSelectTime={(courtId, selectedTimes) => handleSelectTime(courtId, selectedTimes)}
+            onConfirmBooking={(courtId, selectedTimes) =>
+              handleConfirmBooking(courtId, selectedTimes)
+            }
           />
 
           {/* My Bookings */}

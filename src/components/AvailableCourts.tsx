@@ -14,16 +14,11 @@ interface Court {
 
 interface AvailableCourtsProps {
   courts: Court[];
-  onSelectTime?: (courtId: number, selectedTimes: string[]) => void;
   onConfirmBooking?: (courtId: number, selectedTimes: string[]) => void;
 }
 
-export function AvailableCourts({
-  courts,
-  onSelectTime,
-  onConfirmBooking,
-}: Readonly<AvailableCourtsProps>) {
-  const { handleTimeSelect, isTimeSelected, selectedTimes } = useTimeSelect({ onSelectTime });
+export function AvailableCourts({ courts, onConfirmBooking }: Readonly<AvailableCourtsProps>) {
+  const { handleTimeSelect, isTimeSelected, selectedTimes } = useTimeSelect({});
 
   return (
     <View className="py-4">
@@ -87,7 +82,7 @@ export function AvailableCourts({
               {selectedTimes[court.id]?.length > 0 && (
                 <BookingButton
                   selectedTimes={selectedTimes[court.id]}
-                  onConfirm={() => onConfirmBooking?.(court.id, selectedTimes[court.id])}
+                  onPress={() => onConfirmBooking?.(court.id, selectedTimes[court.id])}
                 />
               )}
             </View>
