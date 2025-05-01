@@ -1,6 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
-import { useCallback, useState } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
+
+import { useTimeSelect } from '@/hooks';
 
 interface Court {
   id: number;
@@ -15,52 +16,7 @@ interface AvailableCourtsProps {
 }
 
 export function AvailableCourts({ courts, onSelectTime }: Readonly<AvailableCourtsProps>) {
-  const [selectedTimes, setSelectedTimes] = useState<{ [key: number]: string[] }>({});
-
-  const handleTimeSelect = useCallback(
-    (courtId: number, selectedTime: string, timeIndex: number, court: Court) => {
-      if (!court.times[timeIndex].isAvailable) return;
-
-      setSelectedTimes((prev) => {
-        const courtSelectedTimes = prev[courtId] || [];
-
-        // Se o horário já está selecionado, remove ele e todos os posteriores
-        if (courtSelectedTimes.includes(selectedTime)) {
-          const index = courtSelectedTimes.indexOf(selectedTime);
-          return {
-            ...prev,
-            [courtId]: courtSelectedTimes.slice(0, index),
-          };
-        }
-
-        // Verifica se o horário é consecutivo ao último selecionado
-        if (courtSelectedTimes.length > 0) {
-          const lastSelectedIndex = court.times.findIndex(
-            (t) => t.time === courtSelectedTimes[courtSelectedTimes.length - 1]
-          );
-          if (timeIndex !== lastSelectedIndex + 1) {
-            // Se não for consecutivo, começa uma nova seleção
-            return {
-              ...prev,
-              [courtId]: [selectedTime],
-            };
-          }
-        }
-
-        // Adiciona o novo horário à seleção
-        const newSelectedTimes = [...courtSelectedTimes, selectedTime];
-
-        // Notifica o componente pai sobre a mudança
-        onSelectTime?.(courtId, newSelectedTimes);
-
-        return {
-          ...prev,
-          [courtId]: newSelectedTimes,
-        };
-      });
-    },
-    [onSelectTime]
-  );
+  const { handleTimeSelect, isTimeSelected } = useTimeSelect({ onSelectTime });
 
   return (
     <View className="py-4">
@@ -92,7 +48,7 @@ export function AvailableCourts({ courts, onSelectTime }: Readonly<AvailableCour
               <View className="flex items-center">
                 <View className="flex-row flex-wrap gap-2">
                   {court.times.map((time, timeIndex) => {
-                    const isSelected = selectedTimes[court.id]?.includes(time.time);
+                    const isSelected = isTimeSelected(court.id, time.time);
                     return (
                       <TouchableOpacity
                         key={`${court.id}-${timeIndex}`}
