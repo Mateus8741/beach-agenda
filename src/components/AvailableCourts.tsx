@@ -17,8 +17,18 @@ interface AvailableCourtsProps {
   onConfirmBooking?: (courtId: number, selectedTimes: string[]) => void;
 }
 
+function getTimeSlotStyle(isSelected: boolean, isAvailable: boolean) {
+  if (isSelected) return 'bg-orange-500';
+  return isAvailable ? 'bg-orange-100 active:bg-orange-200' : 'bg-gray-200 opacity-50';
+}
+
+function getTimeSlotTextStyle(isSelected: boolean, isAvailable: boolean) {
+  if (isSelected) return 'text-white';
+  return isAvailable ? 'text-orange-500' : 'text-gray-500';
+}
+
 export function AvailableCourts({ courts, onConfirmBooking }: Readonly<AvailableCourtsProps>) {
-  const { handleTimeSelect, isTimeSelected, selectedTimes } = useTimeSelect({});
+  const { handleTimeSelect, isTimeSelected, selectedTimes } = useTimeSelect();
 
   return (
     <View className="py-4">
@@ -56,21 +66,15 @@ export function AvailableCourts({ courts, onConfirmBooking }: Readonly<Available
                         key={`${court.id}-${timeIndex}`}
                         disabled={!time.isAvailable}
                         onPress={() => handleTimeSelect(court.id, time.time, timeIndex, court)}
-                        className={`h-8 w-14 items-center justify-center rounded-lg ${
-                          isSelected
-                            ? 'bg-orange-500'
-                            : time.isAvailable
-                              ? 'bg-orange-100 active:bg-orange-200'
-                              : 'bg-gray-200 opacity-50'
-                        }`}>
+                        className={`h-8 w-14 items-center justify-center rounded-lg ${getTimeSlotStyle(
+                          isSelected,
+                          time.isAvailable
+                        )}`}>
                         <Text
-                          className={`text-sm font-medium ${
-                            isSelected
-                              ? 'text-white'
-                              : time.isAvailable
-                                ? 'text-orange-500'
-                                : 'text-gray-500'
-                          }`}>
+                          className={`text-sm font-medium ${getTimeSlotTextStyle(
+                            isSelected,
+                            time.isAvailable
+                          )}`}>
                           {time.time}
                         </Text>
                       </TouchableOpacity>

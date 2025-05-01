@@ -10,11 +10,7 @@ interface Court {
   times: Time[];
 }
 
-interface UseTimeSelectProps {
-  onSelectTime?: (courtId: number, selectedTimes: string[]) => void;
-}
-
-export function useTimeSelect({ onSelectTime }: UseTimeSelectProps) {
+export function useTimeSelect() {
   const [selectedTimes, setSelectedTimes] = useState<{ [key: number]: string[] }>({});
 
   const handleTimeSelect = useCallback(
@@ -45,7 +41,6 @@ export function useTimeSelect({ onSelectTime }: UseTimeSelectProps) {
         }
 
         const newSelectedTimes = [...courtSelectedTimes, selectedTime];
-        onSelectTime?.(courtId, newSelectedTimes);
 
         return {
           ...prev,
@@ -53,7 +48,7 @@ export function useTimeSelect({ onSelectTime }: UseTimeSelectProps) {
         };
       });
     },
-    [onSelectTime]
+    []
   );
 
   const isTimeSelected = useCallback(
