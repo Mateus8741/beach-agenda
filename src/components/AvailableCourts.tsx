@@ -39,15 +39,29 @@ export function AvailableCourts({ courts, onSelectTime }: Readonly<AvailableCour
               </View>
             </View>
 
-            <View className="flex-row flex-wrap gap-2">
-              {court.times.map((time, timeIndex) => (
-                <TouchableOpacity
-                  key={`${court.id}-${timeIndex}`}
-                  onPress={() => onSelectTime?.(court.id, time.time)}
-                  className="rounded bg-orange-100 px-3 py-1">
-                  <Text className="text-orange-500">{time.time}</Text>
-                </TouchableOpacity>
-              ))}
+            <View className="mt-3">
+              <Text className="mb-2 text-sm font-medium text-gray-600">Horários Disponíveis</Text>
+              <View className="flex items-center">
+                <View className="flex-row flex-wrap gap-2">
+                  {court.times.map((time, timeIndex) => (
+                    <TouchableOpacity
+                      key={`${court.id}-${timeIndex}`}
+                      onPress={() => time.isAvailable && onSelectTime?.(court.id, time.time)}
+                      className={`h-8 w-14 items-center justify-center rounded-lg ${
+                        time.isAvailable
+                          ? 'bg-orange-100 active:bg-orange-200'
+                          : 'bg-gray-200 opacity-50'
+                      }`}>
+                      <Text
+                        className={`text-sm font-medium ${
+                          time.isAvailable ? 'text-orange-500' : 'text-gray-500'
+                        }`}>
+                        {time.time}
+                      </Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              </View>
             </View>
           </View>
         ))}
