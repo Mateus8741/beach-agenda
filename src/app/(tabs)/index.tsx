@@ -2,20 +2,78 @@ import { Ionicons } from '@expo/vector-icons';
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { Calendar, Header, SportSelect } from '@/components';
+import { AvailableCourts, Calendar, Header, SportSelect } from '@/components';
 
 const courts = [
   {
     id: 1,
-    name: 'Beach Tennis Court 1',
-    location: 'Copacabana Beach',
-    times: ['9:00 AM', '10:00 AM', '11:00 AM', '1:00 PM', '2:00 PM', '3:00 PM'],
+    name: 'Quadra de Tênis 1',
+    location: 'Praia de Copacabana',
+    times: [
+      { time: '9:00', isAvailable: true },
+      { time: '9:30', isAvailable: false },
+      { time: '10:00', isAvailable: true },
+      { time: '10:30', isAvailable: false },
+      { time: '11:00', isAvailable: true },
+      { time: '11:30', isAvailable: false },
+      { time: '12:00', isAvailable: true },
+      { time: '12:30', isAvailable: false },
+      { time: '13:00', isAvailable: true },
+      { time: '13:30', isAvailable: false },
+      { time: '14:00', isAvailable: true },
+      { time: '14:30', isAvailable: false },
+      { time: '15:00', isAvailable: true },
+      { time: '15:30', isAvailable: false },
+      { time: '16:00', isAvailable: true },
+      { time: '16:30', isAvailable: false },
+      { time: '17:00', isAvailable: true },
+      { time: '17:30', isAvailable: false },
+      { time: '18:00', isAvailable: true },
+      { time: '18:30', isAvailable: false },
+      { time: '19:00', isAvailable: true },
+      { time: '19:30', isAvailable: true },
+      { time: '20:00', isAvailable: true },
+      { time: '20:30', isAvailable: true },
+      { time: '21:00', isAvailable: true },
+      { time: '21:30', isAvailable: true },
+      { time: '22:00', isAvailable: true },
+    ],
   },
   {
     id: 2,
-    name: 'Beach Tennis Court 2',
-    location: 'Ipanema Beach',
-    times: ['8:00 AM', '10:00 AM', '11:00 AM', '1:00 PM', '2:00 PM', '3:00 PM'],
+    name: 'Quadra de Tênis 2',
+    location: 'Praia de Ipanema',
+    times: [
+      { time: '8:00', isAvailable: true },
+      { time: '8:30', isAvailable: true },
+      { time: '9:00', isAvailable: true },
+      { time: '9:30', isAvailable: true },
+      { time: '10:00', isAvailable: true },
+      { time: '10:30', isAvailable: true },
+      { time: '11:00', isAvailable: true },
+      { time: '11:30', isAvailable: true },
+      { time: '12:00', isAvailable: true },
+      { time: '12:30', isAvailable: true },
+      { time: '13:00', isAvailable: true },
+      { time: '13:30', isAvailable: true },
+      { time: '14:00', isAvailable: true },
+      { time: '14:30', isAvailable: true },
+      { time: '15:00', isAvailable: true },
+      { time: '15:30', isAvailable: true },
+      { time: '16:00', isAvailable: true },
+      { time: '16:30', isAvailable: true },
+      { time: '17:00', isAvailable: true },
+      { time: '17:30', isAvailable: true },
+      { time: '18:00', isAvailable: true },
+      { time: '18:30', isAvailable: true },
+      { time: '19:00', isAvailable: true },
+      { time: '19:30', isAvailable: true },
+      { time: '20:00', isAvailable: true },
+      { time: '20:30', isAvailable: true },
+      { time: '21:00', isAvailable: true },
+      { time: '21:30', isAvailable: true },
+      { time: '22:00', isAvailable: true },
+    ],
   },
 ];
 
@@ -37,6 +95,10 @@ const bookings = [
 ];
 
 export default function Home() {
+  function handleSelectTime(courtId: number, time: string) {
+    console.log(courtId, time);
+  }
+
   return (
     <SafeAreaView className="flex-1 bg-white">
       <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
@@ -45,54 +107,16 @@ export default function Home() {
 
           <SportSelect selectedSport="1" onSelectSport={() => {}} />
 
-          <Calendar onSelectDay={(day) => console.log('selected day', day)} />
+          <Calendar onSelectDay={() => {}} />
 
-          {/* Available Courts */}
-          <View className="py-4">
-            <View className="flex-row items-center justify-between">
-              <Text className="text-lg font-semibold">Available Courts</Text>
-              <TouchableOpacity>
-                <Text className="text-orange-500">View All</Text>
-              </TouchableOpacity>
-            </View>
-
-            {/* Court Cards */}
-            <View className="mt-4 space-y-4">
-              {courts.map((court) => (
-                <View key={court.id} className="rounded-lg bg-gray-50 p-4">
-                  <View className="mb-2 flex-row items-center justify-between">
-                    <View>
-                      <Text className="font-semibold">{court.name}</Text>
-                      <View className="flex-row items-center">
-                        <Ionicons name="location-outline" size={14} color="#666" />
-                        <Text className="ml-1 text-sm text-gray-600">{court.location}</Text>
-                      </View>
-                    </View>
-                    <View className="rounded bg-green-100 px-2 py-1">
-                      <Text className="text-xs text-green-600">Available</Text>
-                    </View>
-                  </View>
-
-                  <View className="flex-row flex-wrap gap-2">
-                    {court.times.map((time, timeIndex) => (
-                      <TouchableOpacity
-                        key={`${court.id}-${timeIndex}`}
-                        className="rounded bg-orange-100 px-3 py-1">
-                        <Text className="text-orange-500">{time}</Text>
-                      </TouchableOpacity>
-                    ))}
-                  </View>
-                </View>
-              ))}
-            </View>
-          </View>
+          <AvailableCourts courts={courts} onSelectTime={handleSelectTime} />
 
           {/* My Bookings */}
           <View className="py-4">
             <View className="flex-row items-center justify-between">
-              <Text className="text-lg font-semibold">My Bookings</Text>
+              <Text className="text-lg font-semibold">Minhas Reservas</Text>
               <TouchableOpacity>
-                <Text className="text-orange-500">View All</Text>
+                <Text className="text-orange-500">Ver Todas</Text>
               </TouchableOpacity>
             </View>
 
