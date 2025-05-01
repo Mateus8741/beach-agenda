@@ -46,6 +46,7 @@ export function AvailableCourts({ courts, onSelectTime }: Readonly<AvailableCour
                   {court.times.map((time, timeIndex) => (
                     <TouchableOpacity
                       key={`${court.id}-${timeIndex}`}
+                      disabled={!time.isAvailable}
                       onPress={() => time.isAvailable && onSelectTime?.(court.id, time.time)}
                       className={`h-8 w-14 items-center justify-center rounded-lg ${
                         time.isAvailable
