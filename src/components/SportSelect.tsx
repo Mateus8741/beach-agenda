@@ -3,8 +3,6 @@ import { Text, TouchableOpacity, View } from 'react-native';
 
 import { Icon } from './icons/Icons';
 
-import { useBookingStore } from '@/store';
-
 const sports = [
   {
     id: 1,
@@ -23,20 +21,21 @@ const sports = [
   },
 ];
 
-export function SportSelect() {
-  const { setSport, selectedSport } = useBookingStore();
+interface SportSelectProps {
+  selectedSport?: string;
+  onSelectSport?: (sportId: string) => void;
+}
 
+export function SportSelect({ selectedSport = '1', onSelectSport }: Readonly<SportSelectProps>) {
   return (
     <View className="flex-row gap-3 py-4">
       {sports.map((sport) => {
-        const isSelected = sport.id.toString() === selectedSport?.id;
+        const isSelected = sport.id.toString() === selectedSport;
 
         return (
           <TouchableOpacity
             key={sport.id}
-            onPress={() => {
-              setSport({ id: sport.id.toString(), name: sport.name });
-            }}
+            onPress={() => onSelectSport?.(sport.id.toString())}
             className={
               isSelected
                 ? 'flex-1 items-center rounded-lg bg-orange-500 px-3 py-2'
