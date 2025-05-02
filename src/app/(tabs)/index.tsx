@@ -3,6 +3,25 @@ import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { AvailableCourts, Calendar, Header, SportSelect } from '@/components';
+import { useBookingStore } from '@/store/store';
+
+const sports = [
+  {
+    id: 1,
+    name: 'Beach Tennis',
+    iconName: 'tennisball-outline',
+  },
+  {
+    id: 2,
+    name: 'Volleyball',
+    iconName: 'basketball-outline',
+  },
+  {
+    id: 3,
+    name: 'Footvolley',
+    iconName: 'football-outline',
+  },
+];
 
 const courts = [
   {
@@ -68,8 +87,19 @@ const bookings = [
 ];
 
 export default function Home() {
-  function handleConfirmBooking(courtId: number, selectedTimes: string[]) {
-    console.log(courtId, selectedTimes);
+  const { selectedSport, selectedDate, setSport, setDate, selectedTimes } = useBookingStore();
+
+  function handleConfirmBooking(courtId: number) {
+    const selectedCourt = courts.find((court) => court.id === courtId);
+    console.log('Informações da Reserva:');
+    console.log('Esporte selecionado:', selectedSport?.name || 'Nenhum esporte selecionado');
+    console.log('Quadra:', selectedCourt?.name);
+    console.log('Localização:', selectedCourt?.location);
+    console.log('Horários selecionados:', selectedTimes);
+    console.log(
+      'Data selecionada:',
+      selectedDate?.toLocaleDateString() || 'Nenhuma data selecionada'
+    );
   }
 
   return (
@@ -78,11 +108,24 @@ export default function Home() {
         <View className="px-4 pb-20">
           <Header />
 
-          <SportSelect selectedSport="1" onSelectSport={() => {}} />
+          <SportSelect
+            selectedSport={selectedSport?.id}
+            onSelectSport={(sportId) => {
+              const sport = sports.find((s) => s.id.toString() === sportId);
+              if (sport) {
+                setSport({ id: sportId, name: sport.name });
+              }
+            }}
+          />
 
-          <Calendar onSelectDay={() => {}} />
+          <Calendar
+            onSelectDay={(day) => {
+              const date = new Date(day.date);
+              setDate(date);
+            }}
+          />
 
-          <AvailableCourts courts={courts} />
+          <AvailableCourts courts={courts} onConfirmBooking={handleConfirmBooking} />
 
           {/* My Bookings */}
           <View className="py-4">

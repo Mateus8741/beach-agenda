@@ -61,11 +61,14 @@ export function AvailableCourts({ courts, onConfirmBooking }: Readonly<Available
                 <View className="flex-row flex-wrap gap-2">
                   {court.times.map((time, timeIndex) => {
                     const isSelected = isTimeSelected(court.id, time.time);
+
                     return (
                       <TouchableOpacity
                         key={`${court.id}-${timeIndex}`}
                         disabled={!time.isAvailable}
-                        onPress={() => handleTimeSelect(court.id, time.time, timeIndex, court)}
+                        onPress={() => {
+                          handleTimeSelect(court.id, time.time, timeIndex, court);
+                        }}
                         className={`h-8 w-14 items-center justify-center rounded-lg ${getTimeSlotStyle(
                           isSelected,
                           time.isAvailable
