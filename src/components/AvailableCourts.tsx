@@ -41,7 +41,7 @@ export function AvailableCourts({ courts, onConfirmBooking }: Readonly<Available
 
       <View className="mt-4 space-y-4">
         {courts.map((court) => (
-          <View key={court.id} className="rounded-lg bg-gray-50 p-4">
+          <View key={court.id} className="mb-4 rounded-lg bg-gray-50 p-4">
             <View className="mb-2 flex-row items-center justify-between">
               <View>
                 <Text className="font-semibold">{court.name}</Text>

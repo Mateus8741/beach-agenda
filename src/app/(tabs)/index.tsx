@@ -82,12 +82,7 @@ export default function Home() {
 
           <Calendar onSelectDay={() => {}} />
 
-          <AvailableCourts
-            courts={courts}
-            onConfirmBooking={(courtId, selectedTimes) =>
-              handleConfirmBooking(courtId, selectedTimes)
-            }
-          />
+          <AvailableCourts courts={courts} />
 
           {/* My Bookings */}
           <View className="py-4">
