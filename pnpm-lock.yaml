@@ -78,6 +78,9 @@ importers:
       '@babel/core':
         specifier: ^7.20.0
         version: 7.26.10
+      '@codewaveds/beautify-json-log':
+        specifier: ^0.1.6
+        version: 0.1.6(react@18.3.1)
       '@types/react':
         specifier: ~18.3.12
         version: 18.3.20
@@ -834,6 +837,12 @@ packages:
   '@babel/types@7.27.0':
     resolution: {integrity: sha512-H45s8fVLYjbhFH62dIJ3WtmJ6RSPt/3DRO0ZcT2SUiYiQyz3BLVb9ADEnLl91m74aQPS3AzzeajZHYOalWe3bg==}
     engines: {node: '>=6.9.0'}
+
+  '@codewaveds/beautify-json-log@0.1.6':
+    resolution: {integrity: sha512-1fzvmJln78tlpkacy7aB2j9gKjhrYiWTPCRXst5mL8FWdB9loZTKjp8Q6Wp/qjCFMMy15cIeLlu27xXoJ5d+Uw==}
+    engines: {node: '>=10'}
+    peerDependencies:
+      react: '>=16'
 
   '@egjs/hammerjs@2.0.17':
     resolution: {integrity: sha512-XQsZgjm2EcVUiZQf11UBJQfmZeEmOW8DpI1gsFeln6w0ae0ii4dMQEQ0kjl6DspdWX1aGY1/loyXnP0JS06e/A==}
@@ -5682,6 +5691,10 @@ snapshots:
     dependencies:
       '@babel/helper-string-parser': 7.25.9
       '@babel/helper-validator-identifier': 7.25.9
+
+  '@codewaveds/beautify-json-log@0.1.6(react@18.3.1)':
+    dependencies:
+      react: 18.3.1
 
   '@egjs/hammerjs@2.0.17':
     dependencies:

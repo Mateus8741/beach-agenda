@@ -27,7 +27,7 @@ export function SportSelect() {
   const { selectedSport, setSport } = useBookingStore();
 
   return (
-    <View className="flex-row gap-3 py-4">
+    <View className="mt-4 flex-row gap-3 py-4">
       {sports.map((sport) => {
         const isSelected = sport.id.toString() === selectedSport?.id.toString();
 

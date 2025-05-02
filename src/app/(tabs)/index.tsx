@@ -1,3 +1,4 @@
+import { BeautifyJsonLog } from '@codewaveds/beautify-json-log';
 import { Ionicons } from '@expo/vector-icons';
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -74,40 +75,33 @@ interface Booking {
 }
 
 export default function Home() {
-  const { selectedSport, selectedDate, setDate, resetBooking } = useBookingStore();
+  const { selectedSport, selectedDate, resetBooking } = useBookingStore();
 
   function handleConfirmBooking(booking: Booking) {
     const selectedCourt = courts.find((court) => court.id === booking.courtId);
-    console.log('Informações da Reserva:');
-    console.log('Court ID:', booking.courtId);
-    console.log('Esporte selecionado:', selectedSport?.name || 'Nenhum esporte selecionado');
-    console.log('Quadra:', selectedCourt?.name);
-    console.log('Localização:', selectedCourt?.location);
-    console.log('Horários selecionados:', booking.selectedTimes);
-    console.log(
-      'Data selecionada:',
-      selectedDate?.toLocaleDateString() || 'Nenhuma data selecionada'
-    );
-    console.log('--------------------------------');
-    console.log('Reserva confirmada com sucesso!');
-    console.log('--------------------------------');
+    const currentDate = selectedDate || new Date();
+
+    BeautifyJsonLog('Reserva confirmada com sucesso!', {
+      booking,
+      selectedSport: selectedSport?.name,
+      selectedCourt: selectedCourt?.name,
+      currentDate: currentDate.toLocaleDateString(),
+    });
+
     resetBooking();
   }
 
   return (
     <SafeAreaView className="flex-1 bg-white">
+      <View className="mb-4 px-4">
+        <Header />
+      </View>
+
       <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
         <View className="px-4 pb-20">
-          <Header />
+          <Calendar />
 
           <SportSelect />
-
-          <Calendar
-            onSelectDay={(day) => {
-              const date = new Date(day.date);
-              setDate(date);
-            }}
-          />
 
           <AvailableCourts
             courts={courts}
