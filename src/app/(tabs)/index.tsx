@@ -5,24 +5,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { AvailableCourts, Calendar, Header, SportSelect } from '@/components';
 import { useBookingStore } from '@/store/store';
 
-const sports = [
-  {
-    id: 1,
-    name: 'Beach Tennis',
-    iconName: 'tennisball-outline',
-  },
-  {
-    id: 2,
-    name: 'Volleyball',
-    iconName: 'basketball-outline',
-  },
-  {
-    id: 3,
-    name: 'Footvolley',
-    iconName: 'football-outline',
-  },
-];
-
 const courts = [
   {
     id: 1,
@@ -86,20 +68,30 @@ const bookings = [
   },
 ];
 
-export default function Home() {
-  const { selectedSport, selectedDate, setSport, setDate, selectedTimes } = useBookingStore();
+interface Booking {
+  courtId: number;
+  selectedTimes: string[];
+}
 
-  function handleConfirmBooking(courtId: number) {
-    const selectedCourt = courts.find((court) => court.id === courtId);
+export default function Home() {
+  const { selectedSport, selectedDate, setDate, resetBooking } = useBookingStore();
+
+  function handleConfirmBooking(booking: Booking) {
+    const selectedCourt = courts.find((court) => court.id === booking.courtId);
     console.log('Informações da Reserva:');
+    console.log('Court ID:', booking.courtId);
     console.log('Esporte selecionado:', selectedSport?.name || 'Nenhum esporte selecionado');
     console.log('Quadra:', selectedCourt?.name);
     console.log('Localização:', selectedCourt?.location);
-    console.log('Horários selecionados:', selectedTimes);
+    console.log('Horários selecionados:', booking.selectedTimes);
     console.log(
       'Data selecionada:',
       selectedDate?.toLocaleDateString() || 'Nenhuma data selecionada'
     );
+    console.log('--------------------------------');
+    console.log('Reserva confirmada com sucesso!');
+    console.log('--------------------------------');
+    resetBooking();
   }
 
   return (
@@ -108,15 +100,7 @@ export default function Home() {
         <View className="px-4 pb-20">
           <Header />
 
-          <SportSelect
-            selectedSport={selectedSport?.id}
-            onSelectSport={(sportId) => {
-              const sport = sports.find((s) => s.id.toString() === sportId);
-              if (sport) {
-                setSport({ id: sportId, name: sport.name });
-              }
-            }}
-          />
+          <SportSelect />
 
           <Calendar
             onSelectDay={(day) => {
@@ -125,7 +109,12 @@ export default function Home() {
             }}
           />
 
-          <AvailableCourts courts={courts} onConfirmBooking={handleConfirmBooking} />
+          <AvailableCourts
+            courts={courts}
+            onConfirmBooking={(courtId, selectedTimes) =>
+              handleConfirmBooking({ courtId, selectedTimes })
+            }
+          />
 
           {/* My Bookings */}
           <View className="py-4">
