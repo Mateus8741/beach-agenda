@@ -78,9 +78,9 @@ export default function Home() {
         <View className="px-4 pb-20">
           <Header />
 
-          <SportSelect selectedSport="1" onSelectSport={() => {}} />
+          <SportSelect />
 
-          <Calendar onSelectDay={() => {}} />
+          <Calendar />
 
           <AvailableCourts
             courts={courts}
