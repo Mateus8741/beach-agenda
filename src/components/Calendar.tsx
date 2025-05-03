@@ -15,7 +15,7 @@ export function Calendar() {
 
   const calendarRef = useRef<FlatList<Date>>(null);
 
-  const handleDateSelect = (date: Date) => {
+  function handleDateSelect(date: Date) {
     setDate(date);
     const index = dates.findIndex((d) => format(d, 'yyyy-MM-dd') === format(date, 'yyyy-MM-dd'));
     if (index !== -1) {
@@ -25,7 +25,7 @@ export function Calendar() {
         viewPosition: 0.5,
       });
     }
-  };
+  }
 
   return (
     <View className="mt-4">
