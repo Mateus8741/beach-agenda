@@ -30,7 +30,7 @@ export function MyBookings({ bookings }: Readonly<MyBookingsProps>) {
     if (Platform.OS === 'ios') {
       ActionSheetIOS.showActionSheetWithOptions(
         {
-          options: ['Cancelar', 'Excluir Reserva'],
+          options: ['Voltar', 'Cancelar Reserva'],
           destructiveButtonIndex: 1,
           cancelButtonIndex: 0,
         },
