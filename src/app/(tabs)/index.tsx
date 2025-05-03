@@ -1,9 +1,8 @@
 import { BeautifyJsonLog } from '@codewaveds/beautify-json-log';
-import { Ionicons } from '@expo/vector-icons';
-import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { AvailableCourts, Calendar, Header, SportSelect } from '@/components';
+import { AvailableCourts, Calendar, Header, MyBookings, SportSelect } from '@/components';
 import { useBookingStore } from '@/store/store';
 
 const courts = [
@@ -110,39 +109,7 @@ export default function Home() {
             }
           />
 
-          {/* My Bookings */}
-          <View className="py-4">
-            <View className="flex-row items-center justify-between">
-              <Text className="text-lg font-semibold">Minhas Reservas</Text>
-              <TouchableOpacity>
-                <Text className="text-orange-500">Ver Todas</Text>
-              </TouchableOpacity>
-            </View>
-
-            <View className="mt-4 space-y-4">
-              {bookings.map((booking) => (
-                <View key={booking.id} className="rounded-lg bg-gray-50 p-4">
-                  <View className="flex-row justify-between">
-                    <View>
-                      <Text className="font-semibold">{booking.court}</Text>
-                      <View className="flex-row items-center">
-                        <Ionicons name="location-outline" size={14} color="#666" />
-                        <Text className="ml-1 text-sm text-gray-600">{booking.location}</Text>
-                      </View>
-                      <View className="mt-2 flex-row items-center">
-                        <Ionicons name="calendar-outline" size={14} color="#666" />
-                        <Text className="ml-1 text-sm text-gray-600">{booking.date}</Text>
-                        <Text className="ml-4 text-sm text-gray-600">{booking.time}</Text>
-                      </View>
-                    </View>
-                    <TouchableOpacity>
-                      <Ionicons name="ellipsis-vertical" size={20} color="#666" />
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              ))}
-            </View>
-          </View>
+          <MyBookings bookings={bookings} />
         </View>
       </ScrollView>
     </SafeAreaView>
