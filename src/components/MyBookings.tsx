@@ -1,5 +1,9 @@
 import { Ionicons } from '@expo/vector-icons';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { useRouter } from 'expo-router';
+import { useState } from 'react';
+import { ActionSheetIOS, Platform, Text, TouchableOpacity, View } from 'react-native';
+
+import { Modal } from './Modal';
 
 interface Bookings {
   id: number;
@@ -14,11 +18,47 @@ interface MyBookingsProps {
 }
 
 export function MyBookings({ bookings }: Readonly<MyBookingsProps>) {
+  const { navigate } = useRouter();
+  const [selectedBooking, setSelectedBooking] = useState<number | null>(null);
+  const [showModal, setShowModal] = useState(false);
+
+  function handleSeeAllBookings() {
+    navigate('/bookings');
+  }
+
+  function handleCancelBooking(id: number) {
+    if (Platform.OS === 'ios') {
+      ActionSheetIOS.showActionSheetWithOptions(
+        {
+          options: ['Cancelar', 'Excluir Reserva'],
+          destructiveButtonIndex: 1,
+          cancelButtonIndex: 0,
+        },
+        (buttonIndex) => {
+          if (buttonIndex === 1) {
+            console.log('delete booking', id);
+          }
+        }
+      );
+    } else {
+      setSelectedBooking(id);
+      setShowModal(true);
+    }
+  }
+
+  function handleDeleteBooking() {
+    if (selectedBooking) {
+      console.log('delete booking', selectedBooking);
+      setShowModal(false);
+      setSelectedBooking(null);
+    }
+  }
+
   return (
     <View className="py-4">
       <View className="flex-row items-center justify-between">
         <Text className="text-lg font-semibold">Minhas Reservas</Text>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={handleSeeAllBookings}>
           <Text className="text-orange-500">Ver Todas</Text>
         </TouchableOpacity>
       </View>
@@ -39,13 +79,19 @@ export function MyBookings({ bookings }: Readonly<MyBookingsProps>) {
                   <Text className="ml-4 text-sm text-gray-600">{booking.time}</Text>
                 </View>
               </View>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={() => handleCancelBooking(booking.id)}>
                 <Ionicons name="ellipsis-vertical" size={20} color="#666" />
               </TouchableOpacity>
             </View>
           </View>
         ))}
       </View>
+
+      <Modal
+        showModal={showModal}
+        setShowModal={setShowModal}
+        handleDeleteBooking={handleDeleteBooking}
+      />
     </View>
   );
 }
