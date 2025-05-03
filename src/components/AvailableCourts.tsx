@@ -34,9 +34,6 @@ export function AvailableCourts({ courts, onConfirmBooking }: Readonly<Available
     <View className="py-4">
       <View className="flex-row items-center justify-between">
         <Text className="text-lg font-semibold">Quadras Disponíveis</Text>
-        <TouchableOpacity onPress={() => {}}>
-          <Text className="text-orange-500">Ver Todas</Text>
-        </TouchableOpacity>
       </View>
 
       <View className="mt-4 space-y-4">
