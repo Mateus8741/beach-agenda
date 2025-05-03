@@ -19,7 +19,11 @@ export function Calendar() {
     setDate(date);
     const index = dates.findIndex((d) => format(d, 'yyyy-MM-dd') === format(date, 'yyyy-MM-dd'));
     if (index !== -1) {
-      calendarRef.current?.scrollToItem({ item: dates[index], animated: true });
+      calendarRef.current?.scrollToItem({
+        item: dates[index],
+        animated: true,
+        viewPosition: 0.5,
+      });
     }
   };
 
