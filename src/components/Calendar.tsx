@@ -1,5 +1,6 @@
 import { addDays, format, startOfWeek } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
+import { useRef } from 'react';
 import { FlatList, Pressable, Text, View } from 'react-native';
 
 import { useBookingStore } from '@/store';
@@ -12,6 +13,16 @@ export function Calendar() {
   const startDate = startOfWeek(new Date(), { weekStartsOn: 1, locale: ptBR });
   const dates = Array.from({ length: daysToRender }, (_, i) => addDays(startDate, i));
 
+  const calendarRef = useRef<FlatList<Date>>(null);
+
+  const handleDateSelect = (date: Date) => {
+    setDate(date);
+    const index = dates.findIndex((d) => format(d, 'yyyy-MM-dd') === format(date, 'yyyy-MM-dd'));
+    if (index !== -1) {
+      calendarRef.current?.scrollToItem({ item: dates[index], animated: true });
+    }
+  };
+
   return (
     <View className="mt-4">
       <Text className="mb-4 text-lg font-bold capitalize">
@@ -20,18 +31,18 @@ export function Calendar() {
 
       <FlatList
         data={dates}
+        ref={calendarRef}
         keyExtractor={(item) => item.toISOString()}
         horizontal
         showsHorizontalScrollIndicator={false}
+        contentContainerStyle={{ paddingHorizontal: 8 }}
         renderItem={({ item }) => {
           const isSelected =
             format(item, 'yyyy-MM-dd') === format(selectedDate ?? new Date(), 'yyyy-MM-dd');
 
           return (
             <Pressable
-              onPress={() => {
-                setDate(item);
-              }}
+              onPress={() => handleDateSelect(item)}
               className={`mx-1 items-center justify-center rounded-xl px-3 py-2 ${
                 isSelected ? 'bg-orange-500' : 'bg-gray-100'
               }`}>
