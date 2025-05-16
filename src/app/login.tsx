@@ -4,13 +4,26 @@ import { useState } from 'react';
 import { Pressable, Text, TextInput, View } from 'react-native';
 
 import { Container } from '@/components/Container';
+import { useAuth } from '@/hooks/useAuth';
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  const { login } = useAuth();
+
   function handleLogin() {
-    router.replace('/(tabs)');
+    login(
+      { email, password },
+      {
+        onSuccess: () => {
+          router.replace('/(tabs)');
+        },
+        onError: (error) => {
+          console.log(error);
+        },
+      }
+    );
   }
 
   return (
