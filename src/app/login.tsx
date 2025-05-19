@@ -1,10 +1,11 @@
 import { Ionicons } from '@expo/vector-icons';
-import { Link, router } from 'expo-router';
+import { Link } from 'expo-router';
 import { useState } from 'react';
 import { Pressable, Text, TextInput, View } from 'react-native';
 
 import { Container } from '@/components/Container';
 import { useAuth } from '@/hooks/useAuth';
+import { useUserStorage } from '@/store';
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
@@ -12,12 +13,16 @@ export default function LoginScreen() {
 
   const { login } = useAuth();
 
+  const { token, user } = useUserStorage();
+  console.log(token, user);
+
   function handleLogin() {
     login(
       { email, password },
       {
         onSuccess: () => {
-          router.replace('/(tabs)');
+          // router.replace('/(tabs)');
+          console.log('success');
         },
         onError: (error) => {
           console.log(error);

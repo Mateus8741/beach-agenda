@@ -1,4 +1,8 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import { api } from '../apiConfig';
+
+import { tokenKey } from '@/store';
 
 interface User {
   id: string;
@@ -27,7 +31,6 @@ export const authUseCases = {
       password,
     });
 
-    localStorage.setItem('@beach-agenda:token', data.token);
     return data;
   },
 
@@ -38,7 +41,6 @@ export const authUseCases = {
       password,
     });
 
-    localStorage.setItem('@beach-agenda:token', data.token);
     return data;
   },
 
@@ -47,7 +49,7 @@ export const authUseCases = {
     return data;
   },
 
-  logout() {
-    localStorage.removeItem('@beach-agenda:token');
+  async logout() {
+    await AsyncStorage.removeItem(tokenKey);
   },
 };
