@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const baseURL = 'http://i00k8swwgcwgogs4w80sg088.31.97.18.198.sslip.io/';
+const baseURL = 'http://i00k8swwgcwgogs4w80sg088.31.97.18.198.sslip.io';
 
 export const api = axios.create({
   baseURL,

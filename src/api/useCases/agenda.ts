@@ -1,17 +1,28 @@
 import { api } from '../apiConfig';
 
+interface TimeSlot {
+  id: string;
+  time: string;
+  isAvailable: boolean;
+}
+
 interface Agenda {
   id: string;
   title: string;
   description: string;
   date: string;
   userId: string;
+  timeSlots: TimeSlot[];
 }
 
-export interface CreateAgendaData {
+interface CreateAgendaData {
   title: string;
   description: string;
   date: string;
+  timeSlots: {
+    time: string;
+    isAvailable: boolean;
+  }[];
 }
 
 export const agendaUseCases = {

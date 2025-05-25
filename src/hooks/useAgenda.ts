@@ -1,6 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-import type { CreateAgendaData } from '@/api/useCases/agenda';
 import { agendaUseCases } from '@/api/useCases/agenda';
 
 export function useAgenda() {
@@ -19,8 +18,7 @@ export function useAgenda() {
   });
 
   const updateAgendaMutation = useMutation({
-    mutationFn: ({ id, data }: { id: string; data: Partial<CreateAgendaData> }) =>
-      agendaUseCases.updateAgenda(id, data),
+    mutationFn: ({ id, data }: { id: string; data: any }) => agendaUseCases.updateAgenda(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['agendas'] });
     },

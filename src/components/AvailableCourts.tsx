@@ -6,15 +6,18 @@ import { BookingButton } from './BookingButton';
 import { useTimeSelect } from '@/hooks';
 
 interface Court {
-  id: number;
+  id: string;
   name: string;
   location: string;
-  times: { time: string; isAvailable: boolean }[];
+  times: {
+    time: string;
+    isAvailable: boolean;
+  }[];
 }
 
 interface AvailableCourtsProps {
   courts: Court[];
-  onConfirmBooking?: (courtId: number, selectedTimes: string[]) => void;
+  onConfirmBooking?: (courtId: string, selectedTimes: string[]) => void;
 }
 
 function getTimeSlotStyle(isSelected: boolean, isAvailable: boolean) {
@@ -27,7 +30,7 @@ function getTimeSlotTextStyle(isSelected: boolean, isAvailable: boolean) {
   return isAvailable ? 'text-orange-500' : 'text-gray-500';
 }
 
-export function AvailableCourts({ courts, onConfirmBooking }: Readonly<AvailableCourtsProps>) {
+export function AvailableCourts({ courts, onConfirmBooking }: AvailableCourtsProps) {
   const { handleTimeSelect, isTimeSelected, selectedTimes } = useTimeSelect();
 
   return (
@@ -57,14 +60,14 @@ export function AvailableCourts({ courts, onConfirmBooking }: Readonly<Available
               <View className="flex items-center">
                 <View className="flex-row flex-wrap gap-2">
                   {court.times.map((time, timeIndex) => {
-                    const isSelected = isTimeSelected(court.id, time.time);
+                    const isSelected = isTimeSelected(time.time);
 
                     return (
                       <TouchableOpacity
                         key={`${court.id}-${timeIndex}`}
                         disabled={!time.isAvailable}
                         onPress={() => {
-                          handleTimeSelect(court.id, time.time, timeIndex, court);
+                          handleTimeSelect(time.time);
                         }}
                         className={`h-8 w-14 items-center justify-center rounded-lg ${getTimeSlotStyle(
                           isSelected,
@@ -83,10 +86,10 @@ export function AvailableCourts({ courts, onConfirmBooking }: Readonly<Available
                 </View>
               </View>
 
-              {selectedTimes[court.id]?.length > 0 && (
+              {selectedTimes?.length > 0 && (
                 <BookingButton
-                  selectedTimes={selectedTimes[court.id]}
-                  onPress={() => onConfirmBooking?.(court.id, selectedTimes[court.id])}
+                  selectedTimes={selectedTimes}
+                  onPress={() => onConfirmBooking?.(court.id, selectedTimes)}
                 />
               )}
             </View>

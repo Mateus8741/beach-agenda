@@ -6,69 +6,26 @@ import { AvailableCourts, Calendar, Header, MyBookings, SportSelect } from '@/co
 import { useAgenda } from '@/hooks/useAgenda';
 import { useBookingStore } from '@/store/store';
 
-const courts = [
-  {
-    id: 1,
-    name: 'Quadra de Tênis 1',
-    location: 'Praia de Copacabana',
-    times: [
-      { time: '9:00', isAvailable: true },
-      { time: '10:00', isAvailable: true },
-      { time: '11:00', isAvailable: true },
-      { time: '12:00', isAvailable: true },
-      { time: '13:00', isAvailable: true },
-      { time: '14:00', isAvailable: false },
-      { time: '15:00', isAvailable: true },
-      { time: '16:00', isAvailable: false },
-      { time: '17:00', isAvailable: true },
-      { time: '18:00', isAvailable: false },
-      { time: '19:00', isAvailable: false },
-      { time: '20:00', isAvailable: false },
-      { time: '21:00', isAvailable: true },
-      { time: '22:00', isAvailable: true },
-    ],
-  },
-  {
-    id: 2,
-    name: 'Quadra de Tênis 2',
-    location: 'Praia de Ipanema',
-    times: [
-      { time: '8:00', isAvailable: true },
-      { time: '9:00', isAvailable: true },
-      { time: '10:00', isAvailable: true },
-      { time: '11:00', isAvailable: true },
-      { time: '12:00', isAvailable: true },
-      { time: '13:00', isAvailable: false },
-      { time: '14:00', isAvailable: false },
-      { time: '15:00', isAvailable: true },
-      { time: '16:00', isAvailable: false },
-      { time: '17:00', isAvailable: true },
-      { time: '18:00', isAvailable: false },
-      { time: '19:00', isAvailable: false },
-      { time: '20:00', isAvailable: false },
-      { time: '21:00', isAvailable: true },
-      { time: '22:00', isAvailable: true },
-    ],
-  },
-];
-
 interface Booking {
-  courtId: number;
+  courtId: string;
   selectedTimes: string[];
 }
 
 export default function Courts() {
   const { selectedSport, selectedDate, resetBooking } = useBookingStore();
-  const { agendas, isLoadingAgendas } = useAgenda();
+  const { agendas } = useAgenda();
+
+  // Debug: Veja o que está vindo do backend
+  console.log('agendas', agendas);
 
   function handleConfirmBooking(booking: Booking) {
-    const selectedCourt = courts.find((court) => court.id === booking.courtId);
+    const selectedCourt = agendas?.find((agenda) => agenda.id === booking.courtId);
     const currentDate = selectedDate || new Date();
 
     BeautifyJsonLog('Reserva confirmada com sucesso!', {
       booking,
       selectedSport: selectedSport?.name,
-      selectedCourt: selectedCourt?.name,
+      selectedCourt: selectedCourt?.title,
       currentDate: currentDate.toLocaleDateString(),
     });
 
@@ -85,10 +42,21 @@ export default function Courts() {
         day: 'numeric',
         year: 'numeric',
       }),
-      time: new Date(agenda.date).toLocaleTimeString('en-US', {
-        hour: 'numeric',
-        minute: 'numeric',
-      }),
+      time: agenda.timeSlots
+        .filter((slot) => !slot.isAvailable)
+        .map((slot) => slot.time)
+        .join(', '),
+    })) ?? [];
+
+  const courts =
+    agendas?.map((agenda) => ({
+      id: agenda.id,
+      name: agenda.title,
+      location: agenda.description,
+      times: agenda.timeSlots.map((slot) => ({
+        time: slot.time,
+        isAvailable: slot.isAvailable,
+      })),
     })) ?? [];
 
   return (
