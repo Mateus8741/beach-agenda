@@ -1,5 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
-import { Link } from 'expo-router';
+import { Link, router } from 'expo-router';
 import { useState } from 'react';
 import { Pressable, Text, TextInput, View } from 'react-native';
 
@@ -21,7 +21,7 @@ export default function LoginScreen() {
       { email, password },
       {
         onSuccess: () => {
-          // router.replace('/(tabs)');
+          router.replace('/(tabs)');
           console.log('success');
         },
         onError: (error) => {
