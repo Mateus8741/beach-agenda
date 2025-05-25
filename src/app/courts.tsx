@@ -3,6 +3,7 @@ import { ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { AvailableCourts, Calendar, Header, MyBookings, SportSelect } from '@/components';
+import { useAgenda } from '@/hooks/useAgenda';
 import { useBookingStore } from '@/store/store';
 
 const courts = [
@@ -51,23 +52,6 @@ const courts = [
   },
 ];
 
-const bookings = [
-  {
-    id: 1,
-    court: 'Beach Tennis Court 1',
-    location: 'Copacabana Beach',
-    date: 'Apr 28, 2025',
-    time: '2:00 PM - 3:00 PM',
-  },
-  {
-    id: 2,
-    court: 'Volleyball Court 3',
-    location: 'Leblon Beach',
-    date: 'May 2, 2025',
-    time: '4:00 PM - 5:00 PM',
-  },
-];
-
 interface Booking {
   courtId: number;
   selectedTimes: string[];
@@ -75,6 +59,7 @@ interface Booking {
 
 export default function Courts() {
   const { selectedSport, selectedDate, resetBooking } = useBookingStore();
+  const { agendas, isLoadingAgendas } = useAgenda();
 
   function handleConfirmBooking(booking: Booking) {
     const selectedCourt = courts.find((court) => court.id === booking.courtId);
@@ -89,6 +74,22 @@ export default function Courts() {
 
     resetBooking();
   }
+
+  const formattedBookings =
+    agendas?.map((agenda) => ({
+      id: agenda.id,
+      court: agenda.title,
+      location: agenda.description,
+      date: new Date(agenda.date).toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+      }),
+      time: new Date(agenda.date).toLocaleTimeString('en-US', {
+        hour: 'numeric',
+        minute: 'numeric',
+      }),
+    })) ?? [];
 
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -109,7 +110,7 @@ export default function Courts() {
             }
           />
 
-          <MyBookings bookings={bookings} />
+          <MyBookings bookings={formattedBookings} />
         </View>
       </ScrollView>
     </SafeAreaView>
