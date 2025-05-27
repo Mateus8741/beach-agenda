@@ -15,9 +15,6 @@ export default function Courts() {
   const { selectedSport, selectedDate, resetBooking } = useBookingStore();
   const { agendas } = useAgenda();
 
-  // Debug: Veja o que está vindo do backend
-  BeautifyJsonLog('agendas', agendas);
-
   function handleConfirmBooking(booking: Booking) {
     const selectedCourt = agendas?.find((agenda) => agenda.id === booking.courtId);
     const currentDate = selectedDate || new Date();
@@ -35,28 +32,32 @@ export default function Courts() {
   const formattedBookings =
     agendas?.map((agenda) => ({
       id: agenda.id,
-      court: agenda.title,
-      location: agenda.description,
-      date: new Date(agenda.date).toLocaleDateString('en-US', {
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric',
-      }),
-      time: agenda.timeSlots
-        .filter((slot) => !slot.isAvailable)
-        .map((slot) => slot.time)
-        .join(', '),
+      court: agenda.title || '',
+      location: agenda.description || '',
+      date: agenda.date
+        ? new Date(agenda.date).toLocaleDateString('en-US', {
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric',
+          })
+        : '',
+      time:
+        agenda.timeSlots
+          ?.filter((slot) => !slot.isAvailable)
+          .map((slot) => slot.time)
+          .join(', ') || '',
     })) ?? [];
 
   const courts =
     agendas?.map((agenda) => ({
       id: agenda.id,
-      name: agenda.title,
-      location: agenda.description,
-      times: agenda.timeSlots.map((slot) => ({
-        time: slot.time,
-        isAvailable: slot.isAvailable,
-      })),
+      name: agenda.title || '',
+      location: agenda.description || '',
+      times:
+        agenda.timeSlots?.map((slot) => ({
+          time: slot.time || '',
+          isAvailable: slot.isAvailable ?? true,
+        })) || [],
     })) ?? [];
 
   return (
