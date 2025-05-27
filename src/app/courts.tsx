@@ -1,4 +1,5 @@
 import { BeautifyJsonLog } from '@codewaveds/beautify-json-log';
+import { useLocalSearchParams } from 'expo-router';
 import { ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -14,16 +15,27 @@ interface Booking {
 export default function Courts() {
   const { selectedSport, selectedDate, resetBooking } = useBookingStore();
   const { agendas } = useAgenda();
+  const { arenaName } = useLocalSearchParams<{ arenaName: string }>();
 
   function handleConfirmBooking(booking: Booking) {
     const selectedCourt = agendas?.find((agenda) => agenda.id === booking.courtId);
     const currentDate = selectedDate || new Date();
 
+    // Format the selected times for better readability
+    const formattedTimes = booking.selectedTimes.join(', ');
+
     BeautifyJsonLog('Reserva confirmada com sucesso!', {
       booking,
       selectedSport: selectedSport?.name,
       selectedCourt: selectedCourt?.title,
-      currentDate: currentDate.toLocaleDateString(),
+      selectedLocation: selectedCourt?.description,
+      selectedDate: currentDate.toLocaleDateString('pt-BR', {
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+      }),
+      selectedTimes: formattedTimes,
     });
 
     resetBooking();
@@ -63,7 +75,7 @@ export default function Courts() {
   return (
     <SafeAreaView className="flex-1 bg-white">
       <View className="mb-4 px-4">
-        <Header />
+        <Header title={arenaName} />
       </View>
 
       <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>

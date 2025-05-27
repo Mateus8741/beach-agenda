@@ -48,7 +48,10 @@ export default function Home() {
   }
 
   function handleArenaPress(arenaId: number) {
-    router.push({ pathname: '/courts', params: { arenaId } });
+    router.push({
+      pathname: '/courts',
+      params: { arenaId, arenaName: arenas[arenaId - 1].name },
+    });
   }
 
   return (
@@ -69,7 +72,10 @@ export default function Home() {
             handleLocationPress={handleLocationPress}
           />
 
-          <AvailableArenas filteredArenas={filteredArenas} handleArenaPress={handleArenaPress} />
+          <AvailableArenas
+            filteredArenas={filteredArenas}
+            handleArenaPress={(arenaId) => handleArenaPress(arenaId)}
+          />
         </View>
       </ScrollView>
     </SafeAreaView>
