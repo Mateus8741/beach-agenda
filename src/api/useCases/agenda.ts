@@ -16,10 +16,12 @@ interface Agenda {
 }
 
 interface CreateAgendaData {
+  id: string;
   title: string;
   description: string;
   date: string;
   timeSlots: {
+    id: string;
     time: string;
     isAvailable: boolean;
   }[];

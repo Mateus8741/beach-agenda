@@ -16,7 +16,7 @@ export default function Courts() {
   const { agendas } = useAgenda();
 
   // Debug: Veja o que está vindo do backend
-  console.log('agendas', agendas);
+  BeautifyJsonLog('agendas', agendas);
 
   function handleConfirmBooking(booking: Booking) {
     const selectedCourt = agendas?.find((agenda) => agenda.id === booking.courtId);
