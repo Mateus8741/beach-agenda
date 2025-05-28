@@ -1,12 +1,12 @@
 import { api } from '../apiConfig';
 
-interface TimeSlot {
+export interface TimeSlot {
   id: string;
   time: string;
   isAvailable: boolean;
 }
 
-interface Agenda {
+export interface Agenda {
   id: string;
   title: string;
   description: string;
@@ -15,7 +15,7 @@ interface Agenda {
   timeSlots: TimeSlot[];
 }
 
-interface CreateAgendaData {
+export interface CreateAgendaData {
   id: string;
   title: string;
   description: string;
