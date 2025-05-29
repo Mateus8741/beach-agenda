@@ -4,6 +4,7 @@ import { ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { AvailableArenas, PopularLocations, SearchBar } from '@/components';
+import { useArena } from '@/hooks';
 
 const locations = [
   { id: 1, name: 'Copacabana' },
@@ -11,46 +12,30 @@ const locations = [
   { id: 3, name: 'Leblon' },
 ];
 
-const arenas = [
-  {
-    id: 1,
-    name: 'Copacabana Arena Complex',
-    location: 'Copacabana Beach',
-    image: 'https://images.unsplash.com/photo-1517649763962-0c623066013b?ixlib=rb-4.0.3',
-    rating: 4.8,
-    tags: ['Beach Tennis', 'Volleyball'],
-    openNow: true,
-  },
-  {
-    id: 2,
-    name: 'Ipanema Sports Center',
-    location: 'Ipanema Beach',
-    image: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3',
-    rating: 4.6,
-    tags: ['Footvolley', 'Volleyball'],
-    openNow: true,
-  },
-];
-
 export default function Home() {
   const router = useRouter();
   const [search, setSearch] = useState('');
   const [selectedLocation, setSelectedLocation] = useState<string | undefined>(undefined);
+  const { arenas, isLoadingArenas } = useArena();
 
-  const filteredArenas = arenas.filter(
-    (arena) =>
-      arena.name.toLowerCase().includes(search.toLowerCase()) &&
-      (selectedLocation === undefined || arena.location.includes(selectedLocation))
-  );
+  const filteredArenas =
+    arenas?.filter(
+      (arena) =>
+        arena.name.toLowerCase().includes(search.toLowerCase()) &&
+        (selectedLocation === undefined || arena.location.includes(selectedLocation))
+    ) ?? [];
 
   function handleLocationPress(locName: string) {
     setSelectedLocation((prev) => (prev === locName ? undefined : locName));
   }
 
-  function handleArenaPress(arenaId: number) {
+  function handleArenaPress(arenaId: string) {
+    const arena = arenas?.find((a) => a.id === arenaId);
+    if (!arena) return;
+
     router.push({
       pathname: '/courts',
-      params: { arenaId, arenaName: arenas[arenaId - 1].name },
+      params: { arenaId, arenaName: arena.name },
     });
   }
 
@@ -74,7 +59,8 @@ export default function Home() {
 
           <AvailableArenas
             filteredArenas={filteredArenas}
-            handleArenaPress={(arenaId) => handleArenaPress(arenaId)}
+            handleArenaPress={handleArenaPress}
+            isLoading={isLoadingArenas}
           />
         </View>
       </ScrollView>

@@ -1,25 +1,46 @@
 import { Ionicons } from '@expo/vector-icons';
 import { Image, Text, TouchableOpacity, View } from 'react-native';
 
-interface Arena {
-  id: number;
-  name: string;
-  location: string;
-  image: string;
-  rating: number;
-  tags: string[];
-  openNow: boolean;
-}
+import type { Arena } from '@/api/useCases/arena';
 
 interface AvailableArenasProps {
   filteredArenas: Arena[];
-  handleArenaPress: (arenaId: number) => void;
+  handleArenaPress: (arenaId: string) => void;
+  isLoading?: boolean;
 }
 
 export function AvailableArenas({
   filteredArenas,
   handleArenaPress,
+  isLoading,
 }: Readonly<AvailableArenasProps>) {
+  if (isLoading) {
+    return (
+      <View className="mt-4">
+        <Text className="mb-2 text-base font-semibold">Available Arenas</Text>
+        <View className="space-y-6">
+          {[1, 2, 3].map((i) => (
+            <View
+              key={i}
+              className="overflow-hidden rounded-xl border border-gray-100 bg-white shadow-md">
+              <View className="h-36 w-full animate-pulse bg-gray-200" />
+              <View className="p-4">
+                <View className="mb-1 h-6 w-3/4 animate-pulse rounded bg-gray-200" />
+                <View className="mb-2 h-4 w-1/2 animate-pulse rounded bg-gray-200" />
+                <View className="mb-3 flex-row gap-2">
+                  {[1, 2].map((j) => (
+                    <View key={j} className="h-6 w-20 animate-pulse rounded bg-gray-200" />
+                  ))}
+                </View>
+                <View className="mt-1 h-10 w-full animate-pulse rounded-lg bg-gray-200" />
+              </View>
+            </View>
+          ))}
+        </View>
+      </View>
+    );
+  }
+
   return (
     <>
       <Text className="mb-2 text-base font-semibold">Available Arenas</Text>
@@ -29,20 +50,17 @@ export function AvailableArenas({
             key={arena.id}
             className="overflow-hidden rounded-xl border border-gray-100 bg-white shadow-md">
             <View>
-              <Image source={{ uri: arena.image }} className="h-36 w-full" resizeMode="cover" />
-              {arena.openNow && (
-                <View className="absolute right-2 top-2 rounded bg-green-500 px-2 py-1">
-                  <Text className="text-xs font-semibold text-white">Open Now</Text>
-                </View>
-              )}
+              <Image
+                source={{
+                  uri: 'https://images.unsplash.com/photo-1517649763962-0c623066013b?ixlib=rb-4.0.3',
+                }}
+                className="h-36 w-full"
+                resizeMode="cover"
+              />
             </View>
             <View className="p-4">
               <View className="mb-1 flex-row items-center justify-between">
                 <Text className="text-base font-bold">{arena.name}</Text>
-                <View className="flex-row items-center">
-                  <Ionicons name="star" size={16} color="#fbbf24" />
-                  <Text className="ml-1 text-base font-semibold text-gray-700">{arena.rating}</Text>
-                </View>
               </View>
               <View className="mb-2 flex-row items-center">
                 <Ionicons name="location-outline" size={14} color="#666" />
@@ -58,7 +76,7 @@ export function AvailableArenas({
               <TouchableOpacity
                 className="mt-1 rounded-lg bg-orange-500 py-2"
                 onPress={() => handleArenaPress(arena.id)}>
-                <Text className="text-center font-semibold text-white">Select Arena</Text>
+                <Text className="text-center font-semibold text-white">Escolher Arena</Text>
               </TouchableOpacity>
             </View>
           </View>
