@@ -1,4 +1,5 @@
 import type { Ionicons } from '@expo/vector-icons';
+import { useMemo } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 
 import { Icon } from './icons/Icons';
@@ -26,12 +27,16 @@ const sports = [
 export function SportSelect() {
   const { selectedSport, setSport } = useBookingStore();
 
+  const SPORT_OPTIONS = useMemo(() => {
+    return sports;
+  }, []);
+
   return (
     <View className="mt-4 flex-col py-4">
       <Text className="mb-4 text-lg font-bold capitalize">Esporte</Text>
 
       <View className="flex-row gap-3">
-        {sports.map((sport) => {
+        {SPORT_OPTIONS.map((sport) => {
           const isSelected = sport.id.toString() === selectedSport?.id.toString();
 
           return (
