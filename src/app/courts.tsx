@@ -1,6 +1,7 @@
 import { BeautifyJsonLog } from '@codewaveds/beautify-json-log';
-import { useLocalSearchParams } from 'expo-router';
-import { ScrollView, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { router, useLocalSearchParams } from 'expo-router';
+import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { AvailableCourts, Calendar, Header, MyBookings, SportSelect } from '@/components';
@@ -76,6 +77,13 @@ export default function Courts() {
     <SafeAreaView className="flex-1 bg-white">
       <View className="mb-4 px-4">
         <Header title={arenaName} />
+      </View>
+
+      <View className="mb-4 px-4">
+        <TouchableOpacity onPress={() => router.back()} className="flex-row items-center gap-2">
+          <Ionicons name="arrow-back" size={24} color="#FF7A00" />
+          <Text className="text-sm font-bold">Voltar</Text>
+        </TouchableOpacity>
       </View>
 
       <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
