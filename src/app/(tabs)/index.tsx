@@ -37,7 +37,7 @@ export default function Home() {
     <SafeAreaView className="flex-1 bg-white">
       <View className="flex-row items-center bg-white px-4 pb-2 pt-2">
         <View style={{ width: 24 }} />
-        <Text className="flex-1 text-center text-xl font-bold">Select Arena</Text>
+        <Text className="flex-1 text-center text-xl font-bold">Escolha uma Arena</Text>
         <View style={{ width: 24 }} />
       </View>
 

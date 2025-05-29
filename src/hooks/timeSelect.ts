@@ -1,30 +1,25 @@
 import { useCallback, useState } from 'react';
 
-interface Time {
+interface TimeSelect {
   time: string;
-  isAvailable: boolean;
-}
-
-interface Court {
-  id: string;
-  times: Time[];
+  courtId: string;
 }
 
 export function useTimeSelect() {
-  const [selectedTimes, setSelectedTimes] = useState<string[]>([]);
+  const [selectedTimes, setSelectedTimes] = useState<TimeSelect[]>([]);
 
-  const handleTimeSelect = useCallback((time: string) => {
+  const handleTimeSelect = useCallback((time: string, courtId: string) => {
     setSelectedTimes((prev) => {
-      if (prev.includes(time)) {
-        return prev.filter((t) => t !== time);
+      if (prev.some((t) => t.time === time && t.courtId === courtId)) {
+        return prev.filter((t) => t.time !== time || t.courtId !== courtId);
       }
-      return [...prev, time];
+      return [...prev, { time, courtId }];
     });
   }, []);
 
   const isTimeSelected = useCallback(
-    (time: string) => {
-      return selectedTimes.includes(time);
+    (time: string, courtId: string) => {
+      return selectedTimes.some((t) => t.time === time && t.courtId === courtId);
     },
     [selectedTimes]
   );

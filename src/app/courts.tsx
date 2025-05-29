@@ -9,7 +9,7 @@ import { useBookingStore } from '@/store/store';
 
 interface Booking {
   courtId: string;
-  selectedTimes: string[];
+  selectedTimes: { time: string; courtId: string }[];
 }
 
 export default function Courts() {
@@ -22,7 +22,7 @@ export default function Courts() {
     const currentDate = selectedDate || new Date();
 
     // Format the selected times for better readability
-    const formattedTimes = booking.selectedTimes.join(', ');
+    const formattedTimes = booking.selectedTimes.map((t) => t.time).join(', ');
 
     BeautifyJsonLog('Reserva confirmada com sucesso!', {
       booking,

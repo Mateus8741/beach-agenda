@@ -17,7 +17,7 @@ interface Court {
 
 interface AvailableCourtsProps {
   courts: Court[];
-  onConfirmBooking?: (courtId: string, selectedTimes: string[]) => void;
+  onConfirmBooking?: (courtId: string, selectedTimes: { time: string; courtId: string }[]) => void;
 }
 
 function getTimeSlotStyle(isSelected: boolean, isAvailable: boolean) {
@@ -30,7 +30,7 @@ function getTimeSlotTextStyle(isSelected: boolean, isAvailable: boolean) {
   return isAvailable ? 'text-orange-500' : 'text-gray-500';
 }
 
-export function AvailableCourts({ courts, onConfirmBooking }: AvailableCourtsProps) {
+export function AvailableCourts({ courts, onConfirmBooking }: Readonly<AvailableCourtsProps>) {
   const { handleTimeSelect, isTimeSelected, selectedTimes } = useTimeSelect();
 
   return (
@@ -60,14 +60,14 @@ export function AvailableCourts({ courts, onConfirmBooking }: AvailableCourtsPro
               <View className="flex items-center">
                 <View className="flex-row flex-wrap gap-2">
                   {court.times.map((time, timeIndex) => {
-                    const isSelected = isTimeSelected(time.time);
+                    const isSelected = isTimeSelected(time.time, court.id);
 
                     return (
                       <TouchableOpacity
                         key={`${court.id}-${timeIndex}`}
                         disabled={!time.isAvailable}
                         onPress={() => {
-                          handleTimeSelect(time.time);
+                          handleTimeSelect(time.time, court.id);
                         }}
                         className={`h-8 w-14 items-center justify-center rounded-lg ${getTimeSlotStyle(
                           isSelected,
@@ -88,7 +88,7 @@ export function AvailableCourts({ courts, onConfirmBooking }: AvailableCourtsPro
 
               {selectedTimes?.length > 0 && (
                 <BookingButton
-                  selectedTimes={selectedTimes}
+                  selectedTimes={selectedTimes.map((t) => t.time)}
                   onPress={() => onConfirmBooking?.(court.id, selectedTimes)}
                 />
               )}
