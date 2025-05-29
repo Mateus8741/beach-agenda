@@ -4,6 +4,7 @@ import { Text, TouchableOpacity, View } from 'react-native';
 import { BookingButton } from './BookingButton';
 
 import { useTimeSelect } from '@/hooks';
+import { useBookingStore } from '@/store/store';
 
 interface Court {
   id: string;
@@ -32,6 +33,7 @@ function getTimeSlotTextStyle(isSelected: boolean, isAvailable: boolean) {
 
 export function AvailableCourts({ courts, onConfirmBooking }: Readonly<AvailableCourtsProps>) {
   const { handleTimeSelect, isTimeSelected, selectedTimes } = useTimeSelect();
+  const { selectedSport } = useBookingStore();
 
   const availableTimes = courts.map((court) => court.times.filter((t) => t.isAvailable).length);
 
@@ -40,6 +42,14 @@ export function AvailableCourts({ courts, onConfirmBooking }: Readonly<Available
       <View className="flex-row items-center justify-between">
         <Text className="text-lg font-semibold">Quadras Disponíveis</Text>
       </View>
+
+      {!selectedSport && (
+        <View className="mt-2 rounded-lg bg-yellow-100 p-3">
+          <Text className="text-center text-sm text-yellow-800">
+            Selecione um esporte para fazer a reserva
+          </Text>
+        </View>
+      )}
 
       <View className="mt-4 space-y-4">
         {courts.map((court, index) => (
@@ -75,18 +85,18 @@ export function AvailableCourts({ courts, onConfirmBooking }: Readonly<Available
                     return (
                       <TouchableOpacity
                         key={`${court.id}-${timeIndex}`}
-                        disabled={!time.isAvailable}
+                        disabled={!time.isAvailable || !selectedSport}
                         onPress={() => {
                           handleTimeSelect(time.time, court.id);
                         }}
                         className={`h-8 w-14 items-center justify-center rounded-lg ${getTimeSlotStyle(
                           isSelected,
-                          time.isAvailable
+                          time.isAvailable && !!selectedSport
                         )}`}>
                         <Text
                           className={`text-sm font-medium ${getTimeSlotTextStyle(
                             isSelected,
-                            time.isAvailable
+                            time.isAvailable && !!selectedSport
                           )}`}>
                           {time.time}
                         </Text>
@@ -96,7 +106,7 @@ export function AvailableCourts({ courts, onConfirmBooking }: Readonly<Available
                 </View>
               </View>
 
-              {selectedTimes?.some((t) => t.courtId === court.id) && (
+              {selectedTimes?.some((t) => t.courtId === court.id) && selectedSport && (
                 <BookingButton
                   selectedTimes={selectedTimes
                     .filter((t) => t.courtId === court.id)
