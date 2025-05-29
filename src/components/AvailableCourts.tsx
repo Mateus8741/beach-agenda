@@ -57,7 +57,7 @@ export function AvailableCourts({ courts, onConfirmBooking }: Readonly<Available
 
             <View className="mt-3">
               <Text className="mb-2 text-sm font-medium text-gray-600">Horários Disponíveis</Text>
-              <View className="flex items-center">
+              <View className="flex">
                 <View className="flex-row flex-wrap gap-2">
                   {court.times.map((time, timeIndex) => {
                     const isSelected = isTimeSelected(time.time, court.id);
