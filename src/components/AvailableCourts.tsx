@@ -86,10 +86,17 @@ export function AvailableCourts({ courts, onConfirmBooking }: Readonly<Available
                 </View>
               </View>
 
-              {selectedTimes?.length > 0 && (
+              {selectedTimes?.some((t) => t.courtId === court.id) && (
                 <BookingButton
-                  selectedTimes={selectedTimes.map((t) => t.time)}
-                  onPress={() => onConfirmBooking?.(court.id, selectedTimes)}
+                  selectedTimes={selectedTimes
+                    .filter((t) => t.courtId === court.id)
+                    .map((t) => t.time)}
+                  onPress={() =>
+                    onConfirmBooking?.(
+                      court.id,
+                      selectedTimes.filter((t) => t.courtId === court.id)
+                    )
+                  }
                 />
               )}
             </View>
