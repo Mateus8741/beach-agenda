@@ -14,7 +14,7 @@ export function PopularLocations({
 }: Readonly<PopularLocationsProps>) {
   return (
     <>
-      <Text className="mb-2 text-base font-semibold">Popular Locations</Text>
+      <Text className="mb-2 text-base font-semibold">Locais Populares</Text>
       <View className="mb-4 flex-row gap-2">
         {locations.map((loc) => (
           <TouchableOpacity

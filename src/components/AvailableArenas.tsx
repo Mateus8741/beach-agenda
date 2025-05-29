@@ -17,7 +17,7 @@ export function AvailableArenas({
   if (isLoading) {
     return (
       <View className="mt-4">
-        <Text className="mb-2 text-base font-semibold">Available Arenas</Text>
+        <Text className="mb-2 text-base font-semibold">Arenas Disponíveis</Text>
         <View className="space-y-6">
           {[1, 2, 3].map((i) => (
             <View
@@ -43,7 +43,7 @@ export function AvailableArenas({
 
   return (
     <>
-      <Text className="mb-2 text-base font-semibold">Available Arenas</Text>
+      <Text className="mb-2 text-base font-semibold">Arenas Disponíveis</Text>
       <View className="space-y-6">
         {filteredArenas.map((arena) => (
           <View
