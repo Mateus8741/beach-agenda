@@ -6,12 +6,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { AvailableArenas, PopularLocations, SearchBar } from '@/components';
 import { useArena } from '@/hooks';
 
-const locations = [
-  { id: 1, name: 'Copacabana' },
-  { id: 2, name: 'Ipanema' },
-  { id: 3, name: 'Leblon' },
-];
-
 export default function Home() {
   const router = useRouter();
   const [search, setSearch] = useState('');
@@ -52,7 +46,7 @@ export default function Home() {
           <SearchBar search={search} setSearch={setSearch} />
 
           <PopularLocations
-            locations={locations}
+            locations={arenas?.map((arena) => arena.location) ?? []}
             selectedLocation={selectedLocation ?? ''}
             handleLocationPress={handleLocationPress}
           />
