@@ -33,6 +33,8 @@ function getTimeSlotTextStyle(isSelected: boolean, isAvailable: boolean) {
 export function AvailableCourts({ courts, onConfirmBooking }: Readonly<AvailableCourtsProps>) {
   const { handleTimeSelect, isTimeSelected, selectedTimes } = useTimeSelect();
 
+  const availableTimes = courts.map((court) => court.times.filter((t) => t.isAvailable).length);
+
   return (
     <View className="py-4">
       <View className="flex-row items-center justify-between">
@@ -40,7 +42,7 @@ export function AvailableCourts({ courts, onConfirmBooking }: Readonly<Available
       </View>
 
       <View className="mt-4 space-y-4">
-        {courts.map((court) => (
+        {courts.map((court, index) => (
           <View key={court.id} className="mb-4 rounded-lg bg-gray-50 p-4">
             <View className="mb-2 flex-row items-center justify-between">
               <View>
@@ -50,8 +52,16 @@ export function AvailableCourts({ courts, onConfirmBooking }: Readonly<Available
                   <Text className="ml-1 text-sm text-gray-600">{court.location}</Text>
                 </View>
               </View>
-              <View className="rounded bg-green-100 px-2 py-1">
-                <Text className="text-xs text-green-600">Disponível</Text>
+              <View
+                className={`rounded px-2 py-1 ${
+                  availableTimes[index] > 0 ? 'bg-green-100' : 'bg-red-100'
+                }`}>
+                <Text
+                  className={`text-xs ${
+                    availableTimes[index] > 0 ? 'text-green-600' : 'text-red-600'
+                  }`}>
+                  {availableTimes[index] > 0 ? 'Disponível' : 'Indisponível'}
+                </Text>
               </View>
             </View>
 
