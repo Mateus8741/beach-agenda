@@ -1,65 +1,39 @@
-import { BeautifyJsonLog } from '@codewaveds/beautify-json-log';
 import { Ionicons } from '@expo/vector-icons';
 import { router, useLocalSearchParams } from 'expo-router';
-import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { AvailableCourts, Calendar, Header, MyBookings, SportSelect } from '@/components';
+import { useBooking } from '@/hooks';
 import { useAgenda } from '@/hooks/useAgenda';
-import { useBookingStore } from '@/store/store';
-
-interface Booking {
-  courtId: string;
-  selectedTimes: { time: string; courtId: string }[];
-}
 
 export default function Courts() {
-  const { selectedSport, selectedDate, resetBooking } = useBookingStore();
   const { agendas } = useAgenda();
   const { arenaName } = useLocalSearchParams<{ arenaName: string }>();
 
-  function handleConfirmBooking(booking: Booking) {
-    const selectedCourt = agendas?.find((agenda) => agenda.id === booking.courtId);
-    const currentDate = selectedDate || new Date();
+  const { createBooking } = useBooking();
 
-    // Format the selected times for better readability
-    const formattedTimes = booking.selectedTimes.map((t) => t.time).join(', ');
+  function handleConfirmBooking(
+    agendaId: string,
+    selectedTimes: { id: string; time: string; courtId: string }[]
+  ) {
+    if (!selectedTimes.length) return;
 
-    BeautifyJsonLog('Reserva confirmada com sucesso!', {
-      booking,
-      selectedSport: selectedSport?.name,
-      selectedCourt: selectedCourt?.title,
-      selectedLocation: selectedCourt?.description,
-      selectedDate: currentDate.toLocaleDateString('pt-BR', {
-        weekday: 'long',
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric',
-      }),
-      selectedTimes: formattedTimes,
-    });
+    try {
+      console.log(agendaId, selectedTimes);
 
-    resetBooking();
+      // createBooking({
+      //   agendaId,
+      //   timeSlotId: selectedTimes[0].id,
+      // });
+
+      Alert.alert('Sucesso', 'Reserva realizada com sucesso!');
+      router.push('/bookings');
+    } catch (error) {
+      console.error(error);
+      Alert.alert('Erro', 'Não foi possível realizar a reserva. Tente novamente.');
+    }
   }
-
-  const formattedBookings =
-    agendas?.map((agenda) => ({
-      id: agenda.id,
-      court: agenda.title || '',
-      location: agenda.description || '',
-      date: agenda.date
-        ? new Date(agenda.date).toLocaleDateString('en-US', {
-            month: 'short',
-            day: 'numeric',
-            year: 'numeric',
-          })
-        : '',
-      time:
-        agenda.timeSlots
-          ?.filter((slot) => !slot.isAvailable)
-          .map((slot) => slot.time)
-          .join(', ') || '',
-    })) ?? [];
 
   const courts =
     agendas?.map((agenda) => ({
@@ -68,6 +42,7 @@ export default function Courts() {
       location: agenda.description || '',
       times:
         agenda.timeSlots?.map((slot) => ({
+          id: slot.id,
           time: slot.time || '',
           isAvailable: slot.isAvailable ?? true,
         })) || [],
@@ -94,12 +69,19 @@ export default function Courts() {
 
           <AvailableCourts
             courts={courts}
-            onConfirmBooking={(courtId, selectedTimes) =>
-              handleConfirmBooking({ courtId, selectedTimes })
+            onConfirmBooking={(agendaId, timeSlots) =>
+              handleConfirmBooking(
+                agendaId,
+                timeSlots.map((t) => ({
+                  id: t.id,
+                  time: t.time,
+                  courtId: t.courtId,
+                }))
+              )
             }
           />
 
-          <MyBookings bookings={formattedBookings} />
+          <MyBookings />
         </View>
       </ScrollView>
     </SafeAreaView>

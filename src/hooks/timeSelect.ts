@@ -3,17 +3,18 @@ import { useCallback, useState } from 'react';
 interface TimeSelect {
   time: string;
   courtId: string;
+  timeSlotId: string;
 }
 
 export function useTimeSelect() {
   const [selectedTimes, setSelectedTimes] = useState<TimeSelect[]>([]);
 
-  const handleTimeSelect = useCallback((time: string, courtId: string) => {
+  const handleTimeSelect = useCallback((time: string, courtId: string, timeSlotId: string) => {
     setSelectedTimes((prev) => {
       if (prev.some((t) => t.time === time && t.courtId === courtId)) {
         return prev.filter((t) => t.time !== time || t.courtId !== courtId);
       }
-      return [...prev, { time, courtId }];
+      return [...prev, { time, courtId, timeSlotId }];
     });
   }, []);
 

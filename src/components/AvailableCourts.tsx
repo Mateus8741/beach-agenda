@@ -11,6 +11,7 @@ interface Court {
   name: string;
   location: string;
   times: {
+    id: string;
     time: string;
     isAvailable: boolean;
   }[];
@@ -18,7 +19,10 @@ interface Court {
 
 interface AvailableCourtsProps {
   courts: Court[];
-  onConfirmBooking?: (courtId: string, selectedTimes: { time: string; courtId: string }[]) => void;
+  onConfirmBooking?: (
+    courtId: string,
+    selectedTimes: { id: string; time: string; courtId: string }[]
+  ) => void;
 }
 
 function getTimeSlotStyle(isSelected: boolean, isAvailable: boolean) {
@@ -87,7 +91,7 @@ export function AvailableCourts({ courts, onConfirmBooking }: Readonly<Available
                         key={`${court.id}-${timeIndex}`}
                         disabled={!time.isAvailable || !selectedSport}
                         onPress={() => {
-                          handleTimeSelect(time.time, court.id);
+                          handleTimeSelect(time.time, court.id, time.id);
                         }}
                         className={`h-8 w-14 items-center justify-center rounded-lg ${getTimeSlotStyle(
                           isSelected,
@@ -111,12 +115,18 @@ export function AvailableCourts({ courts, onConfirmBooking }: Readonly<Available
                   selectedTimes={selectedTimes
                     .filter((t) => t.courtId === court.id)
                     .map((t) => t.time)}
-                  onPress={() =>
+                  onPress={() => {
                     onConfirmBooking?.(
                       court.id,
-                      selectedTimes.filter((t) => t.courtId === court.id)
-                    )
-                  }
+                      selectedTimes
+                        .filter((t) => t.courtId === court.id)
+                        .map((t) => ({
+                          id: t.timeSlotId,
+                          time: t.time,
+                          courtId: t.courtId,
+                        }))
+                    );
+                  }}
                 />
               )}
             </View>

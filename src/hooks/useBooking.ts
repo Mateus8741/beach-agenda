@@ -14,6 +14,11 @@ export function useBooking() {
     mutationFn: (data: CreateBookingData) => bookingUseCases.createBooking(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['bookings'] });
+      queryClient.invalidateQueries({ queryKey: ['agendas'] });
+      console.log('Booking created');
+    },
+    onError: (error) => {
+      console.error(error);
     },
   });
 
