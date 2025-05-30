@@ -23,7 +23,7 @@ export default function Bookings() {
         },
         (buttonIndex) => {
           if (buttonIndex === 1) {
-            console.log('delete booking', id);
+            deleteBooking(id);
           }
         }
       );

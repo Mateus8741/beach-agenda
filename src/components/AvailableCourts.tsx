@@ -35,7 +35,7 @@ export function AvailableCourts({ courts, onConfirmBooking }: Readonly<Available
   const { handleTimeSelect, isTimeSelected, selectedTimes } = useTimeSelect();
   const { selectedSport } = useBookingStore();
 
-  const availableTimes = courts.map((court) => court.times.filter((t) => t.isAvailable).length);
+  const times = courts.map((court) => court.times.filter((t) => t.isAvailable));
 
   return (
     <View className="py-4">
@@ -64,13 +64,13 @@ export function AvailableCourts({ courts, onConfirmBooking }: Readonly<Available
               </View>
               <View
                 className={`rounded px-2 py-1 ${
-                  availableTimes[index] > 0 ? 'bg-green-100' : 'bg-red-100'
+                  times[index].length > 0 ? 'bg-green-100' : 'bg-red-100'
                 }`}>
                 <Text
                   className={`text-xs ${
-                    availableTimes[index] > 0 ? 'text-green-600' : 'text-red-600'
+                    times[index].length > 0 ? 'text-green-600' : 'text-red-600'
                   }`}>
-                  {availableTimes[index] > 0 ? 'Disponível' : 'Indisponível'}
+                  {times[index].length > 0 ? 'Disponível' : 'Indisponível'}
                 </Text>
               </View>
             </View>
