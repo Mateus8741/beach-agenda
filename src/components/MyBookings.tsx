@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
-import { ActionSheetIOS, Platform, Text, View } from 'react-native';
+import { ActionSheetIOS, Platform, Pressable, Text, View } from 'react-native';
 
 import { Modal } from './Modal';
 
@@ -58,18 +58,31 @@ export function MyBookings({ bookings }: MyBookingsProps) {
     <View className="mt-8">
       <Text className="mb-4 text-lg font-semibold text-gray-800">Minhas Reservas</Text>
       {bookings.map((booking) => (
-        <View key={booking.id} className="mb-4 rounded-lg border border-gray-200 p-4">
-          <Text className="text-base font-medium text-gray-800">{booking.court}</Text>
-          <Text className="mt-1 text-sm text-gray-600">{booking.location}</Text>
-          <View className="mt-2 flex-row items-center">
-            <Ionicons name="calendar-outline" size={16} color="#6B7280" />
-            <Text className="ml-2 text-sm text-gray-600">{booking.date}</Text>
+        <Pressable
+          key={booking.id}
+          className="mb-4 rounded-lg border border-gray-200 p-4"
+          onPress={() => handleSeeAllBookings()}>
+          <View className="flex-row items-start justify-between">
+            <View className="flex-1">
+              <Text className="text-base font-medium text-gray-800">{booking.court}</Text>
+              <Text className="mt-1 text-sm text-gray-600">{booking.location}</Text>
+              <View className="mt-2 flex-row items-center">
+                <Ionicons name="calendar-outline" size={16} color="#6B7280" />
+                <Text className="ml-2 text-sm text-gray-600">{booking.date}</Text>
+              </View>
+              <View className="mt-1 flex-row items-center">
+                <Ionicons name="time-outline" size={16} color="#6B7280" />
+                <Text className="ml-2 text-sm text-gray-600">{booking.time}</Text>
+              </View>
+            </View>
+            <Ionicons
+              name="ellipsis-vertical"
+              size={20}
+              color="#6B7280"
+              onPress={() => handleCancelBooking(booking.id)}
+            />
           </View>
-          <View className="mt-1 flex-row items-center">
-            <Ionicons name="time-outline" size={16} color="#6B7280" />
-            <Text className="ml-2 text-sm text-gray-600">{booking.time}</Text>
-          </View>
-        </View>
+        </Pressable>
       ))}
 
       <Modal
