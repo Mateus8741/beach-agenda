@@ -1,95 +1,63 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { useState } from 'react';
-import { ActionSheetIOS, Platform, Pressable, Text, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 
-import { Modal } from './Modal';
+import { useBooking } from '@/hooks';
 
-interface Bookings {
-  id: string;
-  court: string;
-  location: string;
-  date: string;
-  time: string;
-}
-
-interface MyBookingsProps {
-  bookings: Bookings[];
-}
-
-export function MyBookings({ bookings }: MyBookingsProps) {
+export function MyBookings() {
   const { navigate } = useRouter();
-  const [selectedBooking, setSelectedBooking] = useState<string | null>(null);
-  const [showModal, setShowModal] = useState(false);
+
+  const { bookings } = useBooking();
 
   function handleSeeAllBookings() {
     navigate('/bookings');
   }
 
-  function handleCancelBooking(id: string) {
-    if (Platform.OS === 'ios') {
-      ActionSheetIOS.showActionSheetWithOptions(
-        {
-          options: ['Voltar', 'Cancelar Reserva'],
-          destructiveButtonIndex: 1,
-          cancelButtonIndex: 0,
-        },
-        (buttonIndex) => {
-          if (buttonIndex === 1) {
-            console.log('delete booking', id);
-          }
-        }
-      );
-    } else {
-      setSelectedBooking(id);
-      setShowModal(true);
-    }
-  }
-
-  function handleDeleteBooking() {
-    if (selectedBooking) {
-      console.log('delete booking', selectedBooking);
-      setShowModal(false);
-      setSelectedBooking(null);
-    }
-  }
+  const formattedDate = (date: string) => {
+    return new Date(date).toLocaleDateString('pt-BR', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+  };
 
   return (
     <View className="mt-8">
-      <Text className="mb-4 text-lg font-semibold text-gray-800">Minhas Reservas</Text>
-      {bookings.map((booking) => (
+      <View className="mb-4 flex-row items-center justify-between">
+        <Text className="text-lg font-semibold text-gray-800">Minhas Reservas</Text>
+
         <Pressable
-          key={booking.id}
-          className="mb-4 rounded-lg border border-gray-200 p-4"
-          onPress={() => handleSeeAllBookings()}>
+          onPress={() => handleSeeAllBookings()}
+          className="flex-row items-center rounded-md border border-orange-500 px-2 py-1">
+          <Text className="text-sm font-bold text-orange-500">Ver todas</Text>
+          <Ionicons name="arrow-forward-outline" size={16} color="#FF7F50" className="ml-1" />
+        </Pressable>
+      </View>
+
+      {bookings?.map((booking) => (
+        <View key={booking.id} className="mb-4 rounded-lg border border-gray-200 p-4">
           <View className="flex-row items-start justify-between">
             <View className="flex-1">
-              <Text className="text-base font-medium text-gray-800">{booking.court}</Text>
-              <Text className="mt-1 text-sm text-gray-600">{booking.location}</Text>
+              <Text className="text-base font-medium text-gray-800">{booking.Agenda.title}</Text>
+              <Text className="mt-1 text-sm text-gray-600">{booking.Agenda.description}</Text>
               <View className="mt-2 flex-row items-center">
                 <Ionicons name="calendar-outline" size={16} color="#6B7280" />
-                <Text className="ml-2 text-sm text-gray-600">{booking.date}</Text>
+                <Text className="ml-2 text-sm text-gray-600">
+                  {formattedDate(booking.Agenda.date)}
+                </Text>
               </View>
               <View className="mt-1 flex-row items-center">
                 <Ionicons name="time-outline" size={16} color="#6B7280" />
-                <Text className="ml-2 text-sm text-gray-600">{booking.time}</Text>
+                <Text className="ml-2 text-sm text-gray-600">
+                  {booking.timeSlots.map((time) => time.time).join(', ')}
+                </Text>
               </View>
             </View>
-            <Ionicons
-              name="ellipsis-vertical"
-              size={20}
-              color="#6B7280"
-              onPress={() => handleCancelBooking(booking.id)}
-            />
           </View>
-        </Pressable>
+        </View>
       ))}
-
-      <Modal
-        showModal={showModal}
-        setShowModal={setShowModal}
-        handleDeleteBooking={handleDeleteBooking}
-      />
     </View>
   );
 }
